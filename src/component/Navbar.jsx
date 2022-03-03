@@ -1,15 +1,16 @@
-import React,{useEffect, useState} from 'react'
+import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-
+import { useSelector } from 'react-redux';
 export default function Navbar() {
+    const {isAuth} = useSelector(state=> state.data);
     const history = useNavigate();
-    console.log(sessionStorage.getItem('logged'))
-    const [logs,setlogs]=useState(sessionStorage.getItem('logged'));
+
+
     const checkstatus = () => {
-        sessionStorage.removeItem('logged')
-        // sessionStorage.setItem('logged',!logs)
-        console.log(sessionStorage.getItem('logged'))
-        setlogs(sessionStorage.setItem('logged',!logs));
+        localStorage.setItem('isauth',"false")
+        setTimeout(()=>{
+            history("/");
+        },[1000])
     }
     return (
         <React.Fragment><nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -39,7 +40,7 @@ export default function Navbar() {
                         </li>
 
                     </ul>
-                    {(logs) ? <div className="d-flex">
+                    {isAuth ==="true" ? <div className="d-flex">
                         <button className="btn btn-outline-success mx-2" onClick={() => history("/Profile")} type="button">Profile</button>
                         <button className="btn btn-outline-success" onClick={() => checkstatus()} type="button">Log out</button>
                     </div> : <div className="d-flex">

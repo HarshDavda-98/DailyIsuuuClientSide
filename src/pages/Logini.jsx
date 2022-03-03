@@ -1,14 +1,15 @@
 import React from "react";
 import { useState } from "react";
-import { Api } from "../component/ApiData";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Spinner from '../component/spinner'
+import { LOGIN } from "../ReactRedux/action";
+import { useDispatch,useSelector } from 'react-redux'
 
 export default function Login() {
-    
-    const [loading, setloading] = useState(false)
+    let dispatch = useDispatch();
     const history = useNavigate()
+    const {loading} = useSelector(state=> state.data);
+    console.log(loading);
     const [Login, SetLogin] = useState({
         EmailAdd: "",
         Password: "",
@@ -22,29 +23,11 @@ export default function Login() {
             [name]: value,
         });
     };
-    const CheckLogin = async () => {
-        await axios.post(`${Api}login`, Login).then((res) => {
-            if (res.status === 201) {
-                setError(res.data.msg)
-                SetLogin("")
-                setTimeout(() => {
-                        sessionStorage.setItem('logged',true);
-                        sessionStorage.setItem('isAuth',true);
-                    history("/Addexpense")
-                }, [1000])
-            }
-        }).catch((err) => {
-            if (err.response) {
-                setError(err.response.data.msg);
-            } else if (err.request) {
-                setError("server crashed")
-            } else {
-                setError("Email doesnt exists or internal server error")
-            }
-        })
+    const CheckLogin =  (Login) => {
+       dispatch(LOGIN(Login,setError,SetLogin,history))
     }
 
-    
+
     const HandleSubmit = (e) => {
         e.preventDefault();
         CheckLogin(Login);

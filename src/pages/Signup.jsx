@@ -13,10 +13,10 @@ export default function Signup(props) {
   const [loading, setloading] = useState(false)
   useEffect(() => {
     onchangeAPI();
-  }, [])
+  },[])
 
-  const onchangeAPI =  () => {
-     fetch(Api).then((res) => res.json()).then((json) => {
+  const onchangeAPI = () => {
+    fetch(Api).then((res) => res.json()).then((json) => {
       setlist(json)
       setloading(false);
     }).catch((err) => { console.log(err) })
